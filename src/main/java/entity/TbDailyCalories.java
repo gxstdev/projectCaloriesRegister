@@ -1,4 +1,4 @@
-package entities;
+package entity;
 
 import java.sql.Date;
 import java.time.format.DateTimeFormatter;

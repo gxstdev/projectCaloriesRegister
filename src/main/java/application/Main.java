@@ -1,6 +1,7 @@
 package application;
 
 import entity.TbDailyCalories;
+import entity.TbUserLogin;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -10,10 +11,26 @@ public class Main {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("CaloriesRegister");
 		EntityManager em = emf.createEntityManager();
 
-		TbDailyCalories obj = em.find(TbDailyCalories.class, 1);
-		System.out.println(obj);
+		try {
+			em.getTransaction().begin();
 
-		em.close();
-		emf.close();
+			TbUserLogin ul = new TbUserLogin(null, "oljdev", "0000");
+			em.persist(ul);
+
+			em.getTransaction().commit();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (em != null) {
+				em.getTransaction().rollback();
+			}
+			em.close();
+			emf.close();
+		}
+		/*
+		 * TbUserLogin ul = new TbUserLogin(null, "gxstdev", "abcd"); em.persist(ul);
+		 * 
+		 * em.close(); emf.close();
+		 */
 	}
 }

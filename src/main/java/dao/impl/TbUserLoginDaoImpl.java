@@ -24,9 +24,6 @@ public class TbUserLoginDaoImpl implements TbUserLoginDao {
 			if (tr != null) {
 				tr.rollback();
 			}
-		} finally {
-			em.close();
-			emf.close();
 		}
 
 	}
@@ -43,10 +40,7 @@ public class TbUserLoginDaoImpl implements TbUserLoginDao {
 			if (tr != null) {
 				tr.rollback();
 			}
-		} finally {
-			em.close();
-			emf.close();
-		}
+		} 
 	}
 
 	@Override
@@ -63,10 +57,7 @@ public class TbUserLoginDaoImpl implements TbUserLoginDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
-		} finally {
-			em.close();
-			emf.close();
-		}
+		} 
 	}
 
 	@Override
@@ -77,23 +68,22 @@ public class TbUserLoginDaoImpl implements TbUserLoginDao {
 			sql.append(" SET tul.flActive = 0 ");
 			sql.append(" WHERE tul.cdLogin = :cdLogin ");
 			
-			Query jpql = em.createQuery(sql.toString(), TbUserLogin.class).setParameter("cdLogin", id);
+			Query jpql = em.createQuery(sql.toString()).setParameter("cdLogin", id);
 			
 			tr.begin();
 			jpql.executeUpdate();
 			tr.commit();
-			
-			//TODO implementar o detach do objeto após ser soft deleted
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (tr != null) {
 				tr.rollback();
 			}
-		} finally {
-			em.close();
-			emf.close();
 		}
 	}
-
+	
+	public void closeEntity() {
+		em.close();
+		emf.close();
+	}
 }

@@ -38,12 +38,12 @@ public class Main {
 				break;
 			case 3:
 				System.out.println("Deseja atualizar qual campo? (1) LOGIN | (2) SENHA | (3) AMBOS");
-				if ((input.nextInt()) == 1) {
-					input.nextLine();
-					
+				opt = input.nextInt(); 
+				input.nextLine();
+				if (opt == 1) {					
 					System.out.println("Digite o LOGIN: ");
 					activeuserLogin.setDsLogin(input.nextLine());
-				} else if ((input.nextInt()) == 2) {
+				} else if (opt == 2) {
 					System.out.println("Digite a SENHA: ");
 					activeuserLogin.setDsPassword(input.nextLine());
 				} else {
@@ -59,6 +59,7 @@ public class Main {
 				break;					
 			default:
 				System.out.println("saindo...");
+				tulDao.closeEntity();
 			}
 			
 			if (opt != 0) {
@@ -71,8 +72,11 @@ public class Main {
 				
 				opt = input.nextInt();
 				input.nextLine();
-				//TODO quando opt = 0, fecha em e emf
-			}
+				if (opt == 0) {
+					tulDao.closeEntity();
+				}
+			}			
 		}
+		input.close();
 	}
 }

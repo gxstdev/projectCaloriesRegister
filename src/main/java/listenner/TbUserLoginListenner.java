@@ -18,11 +18,6 @@ public class TbUserLoginListenner {
 		System.out.println("Usuário atualizado!");
 		System.out.println("-> " + tbUserLogin.getDsLogin());
 		System.out.println("-> " + tbUserLogin.getDsPassword());
-		
-		if (tbUserLogin.getFlActive() == 0) {
-			System.out.println("Usuário deletado!");
-			System.out.println("-> " + tbUserLogin.getDsLogin());
-		}
 	}
 	
 	

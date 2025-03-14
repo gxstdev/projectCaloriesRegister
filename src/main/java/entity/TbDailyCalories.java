@@ -31,7 +31,7 @@ public class TbDailyCalories {
 	
 	@ManyToOne
 	@JoinColumn(name = "CD_USER")
-	private TbUser cdUser;
+	private TbUser tbUser;
 	
 	@Transient
 	private DateTimeFormatter formatter  = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss a");

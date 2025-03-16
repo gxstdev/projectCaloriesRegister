@@ -1,10 +1,11 @@
 package entity;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,6 +14,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "TB_DAILY_CALORIES")
@@ -21,46 +23,61 @@ public class TbDailyCalories {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SeqTbDailyCalories")
 	@SequenceGenerator(name = "SeqTbDailyCalories", sequenceName = "SQ_CD_DAILY_CAL", allocationSize = 1)
 	@Column(name = "CD_DAILY_CAL")
-	private Integer cdDailyCalories;
+	private Integer code;
 	
+	@NotNull
 	@Column(name = "DT_REGISTER")
-	private Date dtRegister;
-	
+	private LocalDate date;
+
+	@NotNull
 	@Column(name = "QT_CALORIES")
-	private Integer qtCalories;
-	
-	@ManyToOne
+	private Integer quantity;
+
+	@NotNull
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CD_USER")
-	private TbUser tbUser;
-	
+	private TbUser user;
+
 	@Transient
-	private DateTimeFormatter formatter  = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss a");
+	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss a");
+
+	public TbDailyCalories() {
+	}
+
+	public TbDailyCalories(Integer code, @NotNull LocalDate date, @NotNull Integer quantity, @NotNull TbUser user) {
+		this.code = code;
+		this.date = date;
+		this.quantity = quantity == null ? 0 : quantity;
+		this.user = user;
+	}
 
 	public Integer getCdDailyCalories() {
-		return cdDailyCalories;
+		return code;
 	}
+
 	public void setCdDailyCalories(Integer cdDailyCalories) {
-		this.cdDailyCalories = cdDailyCalories;
+		this.code = cdDailyCalories;
 	}
-	
-	public Date getDtRegister() {
-		return dtRegister;
+
+	public LocalDate getDtRegister() {
+		return date;
 	}
-	public void setDtRegister(Date dtRegister) {
-		this.dtRegister = dtRegister;
+
+	public void setDtRegister(LocalDate dtRegister) {
+		this.date = dtRegister;
 	}
-	
+
 	public Integer getQtCalories() {
-		return qtCalories;
+		return quantity;
 	}
+
 	public void setQtCalories(Integer qtCalories) {
-		this.qtCalories = qtCalories;
+		this.quantity = qtCalories;
 	}
-	
+
 	@Override
 	public String toString() {
-		return String.format("CD REGISTRO CAL: %d - DATA: %s - QUATIDADE CALORIAS: %d", 
-				cdDailyCalories , dtRegister, qtCalories);
+		return String.format("CD REGISTRO CAL: %d - DATA: %s - QUATIDADE CALORIAS: %d", code, date, quantity);
 	}
-	
+
 }

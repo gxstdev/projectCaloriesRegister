@@ -2,81 +2,82 @@ package application;
 
 import java.util.Scanner;
 
+import dao.impl.TbUserDaoImpl;
 import dao.impl.TbUserLoginDaoImpl;
+import entity.TbUser;
 import entity.TbUserLogin;
 
 public class Main {
-	public static void main(String[] args) {
-		Scanner input = new Scanner(System.in);	
-		TbUserLogin activeuserLogin = new TbUserLogin();
-		TbUserLoginDaoImpl tulDao = new TbUserLoginDaoImpl();
-		
-		System.out.println("Digite a opção desejada: ");
-		System.out.println("1 - CREATE");
-		System.out.println("2 - READ");
-		System.out.println("3 - UPDATE");
-		System.out.println("4 - DELETE");
-		System.out.println("0 - SAIR");
+	private static Scanner input = new Scanner(System.in);
+	private static TbUserLogin activeuserLogin = new TbUserLogin();
+	private static TbUser user = new TbUser();
+	private static TbUserLoginDaoImpl tulDao = new TbUserLoginDaoImpl();
+	private static TbUserDaoImpl tuDao = new TbUserDaoImpl();
 
+	public static void main(String[] args) {
+
+		signLogIn();
+
+		if (activeuserLogin != null) {
+			if (validateUser()) {
+				// usuário já existe
+			} else {
+				createUser();
+			}
+
+		}
+
+	}
+
+	private static void createUser() {
+
+	}
+
+	private static boolean validateUser() {
+		user.setUserLogin(activeuserLogin);
+		user = tuDao.findByUSer(user);
+		if (user != null) {
+			System.out.printf("Bem vindo novamente, %s!", user.getNameString());
+			return true;
+		}
+		return false;
+	}
+
+	public static void signLogIn() {
+		System.out.println("Digite -> (1) para se cadastrar | (2) para entrar na sua conta: ");
 		int opt = input.nextInt();
 		input.nextLine();
-		
-		while (opt != 0) {
-			switch (opt) {
-			case 1:
-				System.out.println("Digite o seu LOGIN e SENHA->");
-				TbUserLogin tul = new TbUserLogin(input.nextLine(), input.nextLine());
-				System.out.println(tul);
-				tulDao.insert(tul);
-				activeuserLogin = tul;
-				break;
-			case 2:
-				System.out.println("Digite o seu LOGIN -> ");
-				String dsLogin = input.nextLine();
-				TbUserLogin readTbUserLogin = tulDao.findByLogin(dsLogin);
-				System.out.println(readTbUserLogin);				
-				break;
-			case 3:
-				System.out.println("Deseja atualizar qual campo? (1) LOGIN | (2) SENHA | (3) AMBOS");
-				opt = input.nextInt(); 
-				input.nextLine();
-				if (opt == 1) {					
-					System.out.println("Digite o LOGIN: ");
-					activeuserLogin.setDsLogin(input.nextLine());
-				} else if (opt == 2) {
-					System.out.println("Digite a SENHA: ");
-					activeuserLogin.setDsPassword(input.nextLine());
-				} else {
-					System.out.println("Digite o LOGIN: ");
-					activeuserLogin.setDsLogin(input.nextLine());
-					System.out.println("Digite a SENHA: ");
-					activeuserLogin.setDsPassword(input.nextLine());
-				}
-				tulDao.update(activeuserLogin);
-				break;
-			case 4:
-				tulDao.delete(activeuserLogin.getCdLogin());
-				break;					
-			default:
-				System.out.println("saindo...");
-				tulDao.closeEntity();
-			}
-			
-			if (opt != 0) {
-				System.out.println("Digite a opção desejada: ");
-				System.out.println("1 - CREATE");
-				System.out.println("2 - READ");
-				System.out.println("3 - UPDATE");
-				System.out.println("4 - DELETE");
-				System.out.println("0 - SAIR");
-				
-				opt = input.nextInt();
-				input.nextLine();
-				if (opt == 0) {
-					tulDao.closeEntity();
-				}
-			}			
+
+		if (opt == 1) {
+			System.out.println("Cadastrar!\n");
+			System.out.println("Digite o seu NOME DE USUÁRIO: ->");
+			String userName = input.nextLine();
+
+			System.out.println("Digite a sua SENHA: ->");
+			String passWord = input.nextLine();
+
+			TbUserLogin tul = new TbUserLogin(userName, passWord);
+			tulDao.insert(tul);
+
+			System.out.println("Conta criada!");
+			opt = 2;
 		}
-		input.close();
+
+		if (opt == 2) {
+			System.out.println("Entrar na sua conta!\n");
+			System.out.println("Digite o seu NOME DE USUÁRIO: ->");
+			String userName = input.nextLine();
+
+			System.out.println("Digite a sua SENHA: ->");
+			String passWord = input.nextLine();
+
+			TbUserLogin tul = tulDao.findByLogin(userName);
+
+			if (tul != null && tul.getDsPassword().equalsIgnoreCase(passWord)) {
+				activeuserLogin = tul;
+			} else {
+				System.out.println("Dados inválidos.");
+			}
+		}
 	}
 }

@@ -4,7 +4,7 @@ package dao;
 import entity.TbUserLogin;
 
 public interface TbUserLoginDao {
-	public void insert(TbUserLogin tbUserLogin);	
+	public boolean insert(TbUserLogin tbUserLogin);	
 	public void update(TbUserLogin tbUserLogin);
 	public TbUserLogin findByLogin(String dsLogin);
 	public void delete(Integer id);

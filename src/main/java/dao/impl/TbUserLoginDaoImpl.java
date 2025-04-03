@@ -14,16 +14,18 @@ public class TbUserLoginDaoImpl implements TbUserLoginDao {
 	EntityTransaction tr = em.getTransaction();
 
 	@Override
-	public void insert(TbUserLogin tbUserLogin) {
+	public boolean insert(TbUserLogin tbUserLogin) {
 		try {
 			tr.begin();
 			em.persist(tbUserLogin);
 			tr.commit();
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (tr != null) {
 				tr.rollback();
 			}
+			return false;
 		}
 
 	}

@@ -1,9 +1,12 @@
 package application;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 
+import dao.impl.TbMonthCaloriesGoalDaoImpl;
 import dao.impl.TbUserDaoImpl;
 import dao.impl.TbUserLoginDaoImpl;
+import entity.TbMonthCaloriesGoal;
 import entity.TbUser;
 import entity.TbUserLogin;
 
@@ -11,9 +14,11 @@ public class Main {
 	private static Scanner input = new Scanner(System.in);
 	private static TbUserLogin activeUserLogin;
 	private static TbUser user = new TbUser();
+	
 	private static TbUserLoginDaoImpl tulDao = new TbUserLoginDaoImpl();
 	private static TbUserDaoImpl tuDao = new TbUserDaoImpl();
-
+	private static TbMonthCaloriesGoalDaoImpl tmcDao = new TbMonthCaloriesGoalDaoImpl();
+	
 	public static void main(String[] args) {
 
 		signLogIn();
@@ -22,13 +27,13 @@ public class Main {
 			if (validateUser()) {
 				//operações da conta do user -> criar método
 			}else {
-				createUser();
+				insertUserData();
 			}
 		}
 
 	}
 
-	private static void createUser() {
+	private static void insertUserData() {
 		System.out.println("Adicione suas informações de usuário!");
 		
 		System.out.println("\nDigite seu NOME ->");
@@ -52,7 +57,15 @@ public class Main {
 		TbUser user = new TbUser(null, activeUserLogin, name, age, weight, height, gender);
 		tuDao.insert(user);
 		
-		System.out.println("Usuário criado!");
+		System.out.println("\nDigite a sua meta de caloria diária ->");
+		Integer quantity = input.nextInt();
+		input.nextLine();
+		
+		TbMonthCaloriesGoal monthCaloriesGoal = new TbMonthCaloriesGoal(null, LocalDate.now().getMonth().toString(),
+				quantity, 1, user);
+		tmcDao.insert(monthCaloriesGoal);
+		
+		System.out.println("Informações de Usuário Adicionadas!");
 	}
 
 	private static boolean validateUser() {
@@ -79,10 +92,14 @@ public class Main {
 			String passWord = input.nextLine();
 
 			TbUserLogin tul = new TbUserLogin(userName, passWord);
-			tulDao.insert(tul);
-
-			System.out.println("Conta criada!");
-			opt = 2;
+	
+			if (tulDao.insert(tul)) {
+				System.out.println("Conta criada!");
+				opt = 2;
+			}else {
+				System.out.println("Erro ao criar conta! Verifique os dados inseridos e tente novamente.");
+			}
+			
 		}
 
 		if (opt == 2) {

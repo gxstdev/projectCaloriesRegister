@@ -14,7 +14,7 @@ public class TbUserDaoImpl implements TbUserDao {
 	EntityTransaction tr = em.getTransaction();
 
 	@Override
-	public void insert(TbUser tbUser) {
+	public boolean insert(TbUser tbUser) {
 		try {
 			tr.begin();
 			em.persist(tbUser);
@@ -24,8 +24,9 @@ public class TbUserDaoImpl implements TbUserDao {
 			if (tr != null) {
 				tr.rollback();
 			}
+			return false;
 		}
-
+		return true;
 	}
 
 	@Override

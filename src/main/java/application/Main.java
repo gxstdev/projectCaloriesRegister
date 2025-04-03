@@ -9,7 +9,7 @@ import entity.TbUserLogin;
 
 public class Main {
 	private static Scanner input = new Scanner(System.in);
-	private static TbUserLogin activeuserLogin = new TbUserLogin();
+	private static TbUserLogin activeUserLogin;
 	private static TbUser user = new TbUser();
 	private static TbUserLoginDaoImpl tulDao = new TbUserLoginDaoImpl();
 	private static TbUserDaoImpl tuDao = new TbUserDaoImpl();
@@ -18,23 +18,45 @@ public class Main {
 
 		signLogIn();
 
-		if (activeuserLogin != null) {
+		if (activeUserLogin != null) {
 			if (validateUser()) {
-				// usuário já existe
-			} else {
+				//operações da conta do user -> criar método
+			}else {
 				createUser();
 			}
-
 		}
 
 	}
 
 	private static void createUser() {
-
+		System.out.println("Adicione suas informações de usuário!");
+		
+		System.out.println("\nDigite seu NOME ->");
+		String name = input.nextLine();
+		
+		System.out.println("\nDigite sua IDADE ->");
+		Integer age = input.nextInt();
+		input.nextLine();
+		
+		System.out.println("\nDigite seu PESO ->");
+		Double weight = input.nextDouble();
+		input.nextLine();
+		
+		System.out.println("\nDigite sua ALTURA ->");
+		Double height = input.nextDouble();
+		input.nextLine();
+		
+		System.out.println("\nDigite seu GENÊRO ->");
+		String gender = input.nextLine();
+		
+		TbUser user = new TbUser(null, activeUserLogin, name, age, weight, height, gender);
+		tuDao.insert(user);
+		
+		System.out.println("Usuário criado!");
 	}
 
 	private static boolean validateUser() {
-		user.setUserLogin(activeuserLogin);
+		user.setUserLogin(activeUserLogin);
 		user = tuDao.findByUSer(user);
 		if (user != null) {
 			System.out.printf("Bem vindo novamente, %s!", user.getNameString());
@@ -74,7 +96,7 @@ public class Main {
 			TbUserLogin tul = tulDao.findByLogin(userName);
 
 			if (tul != null && tul.getDsPassword().equalsIgnoreCase(passWord)) {
-				activeuserLogin = tul;
+				activeUserLogin = tul;
 			} else {
 				System.out.println("Dados inválidos.");
 			}

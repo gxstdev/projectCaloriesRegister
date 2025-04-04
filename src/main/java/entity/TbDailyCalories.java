@@ -75,6 +75,14 @@ public class TbDailyCalories {
 		this.quantity = qtCalories;
 	}
 
+	public TbUser getUser() {
+		return user;
+	}
+
+	public void setUser(TbUser user) {
+		this.user = user;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("CD REGISTRO CAL: %d - DATA: %s - QUATIDADE CALORIAS: %d", code, date, quantity);

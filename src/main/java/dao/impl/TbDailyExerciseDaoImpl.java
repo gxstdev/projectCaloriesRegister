@@ -1,23 +1,24 @@
 package dao.impl;
 
-import dao.TbUserDao;
-import entity.TbUser;
+import java.util.List;
+
+import dao.TbDailyExerciseDao;
+import entity.TbDailyExercise;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
-import jakarta.persistence.Query;
 
-public class TbUserDaoImpl implements TbUserDao {
+public class TbDailyExerciseDaoImpl implements TbDailyExerciseDao {
 	EntityManagerFactory emf = Persistence.createEntityManagerFactory("CaloriesRegister");
 	EntityManager em = emf.createEntityManager();
 	EntityTransaction tr = em.getTransaction();
 
 	@Override
-	public boolean insert(TbUser tbUser) {
+	public boolean insert(TbDailyExercise tbDailyExercise) {
 		try {
 			tr.begin();
-			em.persist(tbUser);
+			em.persist(tbDailyExercise);
 			tr.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -30,26 +31,15 @@ public class TbUserDaoImpl implements TbUserDao {
 	}
 
 	@Override
-	public void update(TbUser tbUser) {
+	public void update(TbDailyExercise tbDailyExercise) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public TbUser findByUSer(TbUser tbUser) {
-		try {
-			StringBuilder jpql = new StringBuilder();
-			jpql.append(" SELECT tu FROM TbUser tu ");
-			jpql.append(" WHERE tu.userLogin.cdLogin = :cdLogin ");
-
-			Query query = em.createQuery(jpql.toString(), TbUser.class).setParameter("cdLogin",
-					tbUser.getUserLogin().getCdLogin());
-
-			return (TbUser) query.getSingleResult();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+	public TbDailyExercise findByDailyCalories(TbDailyExercise tbDailyExercise) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -57,4 +47,11 @@ public class TbUserDaoImpl implements TbUserDao {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public List<TbDailyExercise> findAll(TbDailyExercise tbDailyExercise) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
